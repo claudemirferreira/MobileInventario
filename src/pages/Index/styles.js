@@ -72,7 +72,12 @@ export default StyleSheet.create({
         color: '#e22041', 
         fontSize: 15, 
         fontWeight: 'bold'
-    }
+    },
 
+    separator: {
+        marginVertical: 8,
+        borderBottomColor: '#737373',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+      },
 
 });

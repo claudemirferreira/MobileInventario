@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import Incidents from './Incidents';
-import Details from './Details';
+import {NavigationContainer} from '@react-navigation/native';
+import Index from './Index';
+import Search from './Search';
 
 const AppStack = createStackNavigator();
 
@@ -10,8 +10,8 @@ export default function Routes() {
     return (
         <NavigationContainer > 
             <AppStack.Navigator screenOptions={{headerShown:false}}>
-                <AppStack.Screen name='Incidents' component={Incidents}/>
-                <AppStack.Screen name='Details' component={Details}/>
+                <AppStack.Screen name='Index' component={Index}/>
+                <AppStack.Screen name='Search' component={Search}/>
             </AppStack.Navigator>
         </NavigationContainer>
     );

@@ -1,63 +1,57 @@
-import React, {useState, useEffect} from 'react';
-import {View, Image, Text, TouchableOpacity, Linking} from 'react-native';
-import {Feather} from '@expo/vector-icons';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import React, { Fragment } from 'react';
+import { Header, Content, Container, ListItem, ScrollView, Thumbnail, Text, Body, SearchBar } from 'react-native-elements';
 
-import logoImg from '../../assets/logo.png';
+let helperArray = require('./userList');
 
-import styles from './styles';
-import api from '../../services/api';
+export default class Search extends React.Component {
 
-export default function Search() {
-    const [itens, setItens] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [total, setTotal] = useState(0);
-    const [item, setItem] = useState();
+    state = {
+        allUsers: helperArray,
+        usersFiltered: helperArray,
+        search: '',
+    };
 
-    const navigation = useNavigation();
-    const route = useRoute();
-    
-    function navigateBack() {
-        navigation.goBack();
+    updateSearch = search => {
+        this.setState({ search });
+    };
+
+    render() {
+        const { search } = this.state;
+
+        return (
+            <Fragment>
+
+
+                <Header
+                    placement="left"
+                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    centerComponent={{ text: 'Home', style: { color: '#fff' } }}
+                    rightComponent={{ icon: 'home', color: '#fff' }}
+                >
+                </Header>
+
+                <SearchBar
+                    placeholder="Type Here..."
+                    onChangeText={this.updateSearch}
+                    value={search}
+                    platform="android"
+                />
+
+                {this.state.usersFiltered.map(item => (
+
+                    <ListItem
+                        key={item.id}
+                        leftAvatar={{ source: { uri: item.image, } }}
+                        title={item.name}
+                        subtitle={item.address}
+                    >
+                    </ListItem>
+
+                ))}
+
+
+            </Fragment>
+        )
     }
-
-    async function loadItens() {
-        if(loading) {
-            return;
-        }
-
-        if(total > 0 && itens.length === total) {
-            return;
-        }
-
-        setLoading(true);
-
-        // const response = await api.get('item', {params: {item}});
-        await api.get('item', {params: {item}}).then(response => {
-            setItems([... itens, ...response.data]); 
-        });
-
-        // setItems([... itens, ...response.data]);
-        //setTotal(response.headers['x-total-count']);
-        //setPage(page+1);
-        setLoading(false);
-
-    }
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Image source={logoImg}/>
-                <TouchableOpacity onPress={navigateBack}>
-                    <Feather name='arrow-left' size={28} color='#e02041'/>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.incident}>
-
-            </View>
-
-        </View>
-    )
 
 }

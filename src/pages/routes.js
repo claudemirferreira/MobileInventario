@@ -13,7 +13,7 @@ export default function Routes() {
             <AppStack.Navigator screenOptions={{headerShown:false}}>
                 <AppStack.Screen name='Index' component={Index}/>
                 <AppStack.Screen name='Search' component={Search}/>
-                <AppStack.Screen name='Detaiil' component={Detail}/>
+                <AppStack.Screen name='Detail' component={Detail}/>
             </AppStack.Navigator>
         </NavigationContainer>
     );

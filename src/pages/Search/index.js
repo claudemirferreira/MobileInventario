@@ -17,6 +17,12 @@ export default function Search() {
 
     function updateSearch(search) {
         setSearch(search);
+        var intensFiltered = helperArray.filter(function(item) {
+            return item.name.toLowerCase().includes(search.toLowerCase());
+        });
+
+        setItensFiltered(intensFiltered)
+
     }
 
     function openDetail() {
@@ -66,6 +72,7 @@ export default function Search() {
                             chevronColor="white"
                             chevron
                             onPress={openDetail}
+                            
                             containerStyle={{
                                 marginHorizontal: 16,
                                 marginVertical: 8,

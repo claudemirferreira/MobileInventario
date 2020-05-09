@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Header, Button, Icon,  ListItem, Text,  Input } from 'react-native-elements';
+import { Header, Button, Icon, ListItem, Text, Input } from 'react-native-elements';
 import { View } from 'react-native';
 
 import styles from './styles';
@@ -24,13 +24,13 @@ export default function Detail() {
             </View>
 
             <View style={styles.incident}>
-            <Input
-            containerStyle={{ width: '90%' }}
-            placeholder="Quantidade"
-            label="Informe a quantidade"
-            labelStyle={{ marginTop: 16 }}
-          />
-                          <Button style={styles.detailsButton} title="Atualizar" type="outline"/>
+                <Input
+                    containerStyle={{ width: '90%' }}
+                    placeholder="Quantidade"
+                    label="Informe a quantidade"
+                    labelStyle={{ marginTop: 16 }}
+                />
+                <Button style={styles.detailsButton} title="Atualizar" type="outline" />
 
             </View>
 
@@ -39,6 +39,6 @@ export default function Detail() {
 
         </Fragment>
     )
-    
+
 
 }

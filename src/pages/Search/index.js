@@ -1,14 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Header, Icon, ListItem, Text, SearchBar } from 'react-native-elements';
+import { Header, ListItem, SearchBar } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import api from '../../services/api';
 
 import styles from './styles';
-
-let helperArray = require('./itensList');
 
 export default function Search() {
     const navigation = useNavigation()
@@ -26,6 +23,7 @@ export default function Search() {
 
     function clearItens() {
         setItensFiltered([]);
+        setShowLoading(false)
     }
 
     async function loadItens(search) {
@@ -59,8 +57,8 @@ export default function Search() {
                 <SearchBar
                     placeholder="Código aqui..."                    
                     onChangeText={loadItens}
-                    onKeyPress={clearItens}
-                    onClear={clearItens}
+                    
+                    onClear={clearItens}                  
                     value={search}
                     showLoading= {showLoading}                    
                     {...searchBarProperties}

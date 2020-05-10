@@ -22,6 +22,10 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "br.com.company.inventario",
+      "versionCode": 1
+    }
   }
 }

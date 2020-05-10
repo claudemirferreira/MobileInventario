@@ -26,9 +26,7 @@ export default function Index() {
             
             <Text style={styles.title}>Bem-vindo</Text>
             
-            <Button title="Search" onPress={navigateToDetail} />
-            <Separator />
-            <Button title="Detalhe"/>
+            <Button title="Search" onPress={navigateToDetail} />            
 
         </View>
     )

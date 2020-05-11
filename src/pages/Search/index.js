@@ -4,7 +4,6 @@ import { Header, ListItem, SearchBar } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
-
 import styles from './styles';
 
 export default function Search() {
@@ -27,19 +26,16 @@ export default function Search() {
     }
 
     async function loadItens(search) {
+        setItensFiltered([]);
         setSearch(search);
 
         if(search.length > 0) {
-            setShowLoading(true)
+            setShowLoading(true);
             const response = await api.get(`contagem/list/${search}`, {});
-            setItensFiltered([...itensFiltered, ...response.data]);
-            setShowLoading(false)
+            setItensFiltered(response.data);
+            setShowLoading(false);
         }
     }
-
-    useEffect(() => {
-        loadItens();
-    }, []);
 
     return (
         <Fragment>
@@ -57,7 +53,6 @@ export default function Search() {
                 <SearchBar
                     placeholder="Código aqui..."                    
                     onChangeText={loadItens}
-                    
                     onClear={clearItens}                  
                     value={search}
                     showLoading= {showLoading}                    

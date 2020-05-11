@@ -56,6 +56,7 @@ export default function Search() {
                     onClear={clearItens}                  
                     value={search}
                     showLoading= {showLoading}                    
+                    keyboardType='numeric'
                     {...searchBarProperties}
                 />
                 

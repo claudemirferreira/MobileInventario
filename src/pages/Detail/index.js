@@ -1,7 +1,7 @@
 import React, {useState, Fragment } from 'react';
-import { Header, Button, Text, Input } from 'react-native-elements';
+import { Header, Button, Overlay, Text, Input } from 'react-native-elements';
 import { View } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useRoute, useNavigation} from '@react-navigation/native';
 
 import api from '../../services/api';
 import styles from './styles';
@@ -10,10 +10,21 @@ export default function Detail() {
     const [showLoading, setShowLoading] = useState(false);
     const [quantityDisabled, setQuantityDisabled] = useState(true);
     const [quantity, setQuantity] = useState(0);
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
     const route = useRoute();
+    const navigation = useNavigation();
+
     const item = route.params.item;
 
+    function togleOverlay() {
+        setOverlayVisible(!overlayVisible);
+    }
+
+    function backToSearch() {
+        navigation.navigate('Search');
+    }
+    
     function tryDisableButton(text) {
         if(text.length > 0) {
             setQuantityDisabled(false);
@@ -25,11 +36,19 @@ export default function Detail() {
 
     async function updateItem() {
         setShowLoading(true);
-        const response = await api.post(`contagem/efetuar-contagem/${item.id}`, {
-            status: 0,
-            quantidade: quantity
-        });
-        setShowLoading(false);        
+        try {
+            const response = await api.post(`contagem/efetuar-contagem/${item.id}`, {
+                status: 0,
+                quantidade: quantity
+            });
+            setShowLoading(false);
+            setQuantityDisabled(true);
+            setOverlayVisible(true);
+        } catch(error) {
+            setShowLoading(false);
+            //TODO needs notify error to client
+        }
+        
     }
 
     return (
@@ -80,6 +99,18 @@ export default function Detail() {
                     onPress={updateItem}
                     loading={showLoading}
                 />
+            </View>
+
+            <View>
+                {/* <Button title="Open Overlay" onPress={togleOverlay}></Button> */}
+                <Overlay isVisible={overlayVisible} onBackdropPress={togleOverlay}>
+                    <View style={styles.detail}>
+                        <Text>Contagem atualizada com sucesso</Text>
+                        <View style={styles.detail}>
+                            <Button title="Fechar" onPress={backToSearch}></Button>
+                        </View>
+                    </View>
+                </Overlay>
             </View>
 
         </Fragment>

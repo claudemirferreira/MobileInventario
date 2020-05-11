@@ -3,74 +3,25 @@ import Constants from 'expo-constants';
 
 export default StyleSheet.create({
 
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: Constants.statusBarHeight + 20,
-  },
-
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-
-  headerText: {
-    fontSize: 15,
-    color: '#737380'
-  },
-
-  headerTextBold: {
+  itemText: {
     fontWeight: 'bold'
   },
 
-  title: {
-    fontSize: 30,
-    marginBottom: 16,
-    marginTop: 40,
-    color: '#13131a',
-    fontWeight: 'bold'
-  },
-
-  description: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#737380'
-  },
-
-  incidentList: {
-    marginTop: 32
-  },
-
-  incident: {
+  detail: {
     padding: 24,
     borderRadius: 8,
-    backgroundColor: '#eff',
-    marginBottom: 16
-  },
+    backgroundColor: '#fff',
+    marginBottom: 16,
 
-  incidentProperty: {
-    fontSize: 14,
-    color: '#41414d',
-    fontWeight: 'bold'
-  },
-
-  incidentValue: {
-    marginTop: 8,
-    fontSize: 15,
-    color: '#737380'
+    marginHorizontal: 16,
+    marginVertical: 8,
+    borderRadius: 8,
   },
 
   detailsButton: {
     flexDirection: 'row',
     justifyContent: "space-between",
     alignItems: 'center',
-  },
-
-  detailsButtonText: {
-    color: '#e22041',
-    fontSize: 15,
-    fontWeight: 'bold'
   }
 
 });

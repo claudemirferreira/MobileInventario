@@ -16,8 +16,8 @@ export default function Search() {
         platform: "android",
     }
 
-    function openDetail() {
-        navigation.navigate('Detail');
+    function openDetail(item) {
+        navigation.navigate('Detail',{item});
     }
 
     function clearItens() {
@@ -67,7 +67,7 @@ export default function Search() {
                             subtitle={item.endereco.descricao}
                             chevronColor="white"
                             chevron
-                            onPress={openDetail}
+                            onPress={() => openDetail(item)}
                             containerStyle={{
                                 marginHorizontal: 16,
                                 marginVertical: 8,

@@ -24,6 +24,10 @@ export default function Detail() {
     function backToSearch() {
         navigation.navigate('Search');
     }
+
+    function goHome() {
+        navigation.navigate('Index');
+    }
     
     function tryDisableButton(text) {
         if(text.length > 0) {
@@ -56,9 +60,8 @@ export default function Detail() {
 
             <Header
                 placement="left"
-                leftComponent={{ icon: 'menu', color: '#fff' }}
                 centerComponent={{ text: 'Detail', style: { color: '#fff' } }}
-                rightComponent={{ icon: 'home', color: '#fff' }}
+                rightComponent={{ icon: 'home', color: '#fff', onPress: goHome}}
             >
             </Header>
 

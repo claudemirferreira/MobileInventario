@@ -20,6 +20,10 @@ export default function Search() {
         navigation.navigate('Detail',{item});
     }
 
+    function goHome() {
+        navigation.navigate('Index');
+    }
+
     function clearItens() {
         setItensFiltered([]);
         setShowLoading(false)
@@ -41,10 +45,8 @@ export default function Search() {
         <Fragment>
             <Header
                 placement="left"
-                leftComponent={{ icon: 'menu', color: '#fff' }}
-                centerComponent={{ text: 'Search', style: { color: '#fff' } }}
-                rightComponent={{ icon: 'home', color: '#fff' }}
-                
+                centerComponent={{text: 'Search', style: {fontWeight: 'bold', color: '#fff'}}}
+                rightComponent={{icon: 'home', color: '#fff', onPress: goHome}}
             >
             </Header>
 

@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {View, Image, Text, Button, Separator} from 'react-native';
+import React, { Fragment } from 'react';
+import {View, Image, Text, Button} from 'react-native';
+import { Header} from 'react-native-elements';
 
 import {useNavigation} from '@react-navigation/native';
 import logoImg from '../../assets/logo.png';
 
 import styles from './styles';
-import api from '../../services/api';
 
 export default function Index() {
     const navigation = useNavigation()
@@ -19,16 +19,19 @@ export default function Index() {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Image source={logoImg}/>
-            </View>
-            
-            <Text style={styles.title}>Bem-vindo</Text>
-            
-            <Button title="Search" onPress={navigateToDetail} />            
+        <Fragment>
+            <Header
+                placement="left"
+                leftComponent={{ icon: '', color: '#fff'}}
+                centerComponent={{ text: 'Inventário', style: {color: '#fff'}}}
+                rightComponent={{ icon: '', color: '#fff'}}>
+            </Header>
 
-        </View>
+            <View style={styles.container}>
+                <Text style={styles.title}>Bem-vindo</Text>
+                <Button title="Search" onPress={navigateToDetail} />            
+            </View>
+        </Fragment>
     )
 
 }

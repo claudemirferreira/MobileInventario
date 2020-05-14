@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { View, ScrollView } from 'react-native';
-import { Header, ListItem, SearchBar } from 'react-native-elements';
+import React, { useState, Fragment } from 'react';
+import { View, ScrollView, ToastAndroid } from 'react-native';
+import { Header, Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
@@ -11,13 +11,35 @@ export default function Search() {
     const [search, setSearch] = useState("");
     const [itensFiltered, setItensFiltered] = useState([]);
     const [showLoading, setShowLoading] = useState(false);
+    const [dialogVisible, setDialogVisible] = useState(false);
+
 
     const searchBarProperties = {
         platform: "android",
     }
 
+    function togleDialog() {
+        setDialogVisible(!dialogVisible);
+    }
+
     function openDetail(item) {
-        navigation.navigate('Detail',{item});
+        if(item.status != 1) {
+            navigation.navigate('Detail',{item});
+        } else {
+            const message = "Contagem já efetuada para o item selecionado";
+            showToast(message);
+
+        }
+    }
+
+    function showToast(message) {
+        ToastAndroid.showWithGravityAndOffset(
+            message,
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+            25,
+            50, 
+        );
     }
 
     function goHome() {
@@ -35,9 +57,18 @@ export default function Search() {
 
         if(search.length > 0) {
             setShowLoading(true);
-            const response = await api.get(`contagem/list/${search}`, {});
-            setItensFiltered(response.data);
-            setShowLoading(false);
+            try {
+                const response = await api.get(`contagem/list/${search}`, {});
+                setItensFiltered(response.data);
+                setShowLoading(false);
+            } catch(error) {
+                setShowLoading(false);
+                if(!error.response) {
+                    console.log('Cold not connect to server');
+                    togleDialog();
+                }
+            }
+            
         }
     }
 
@@ -81,7 +112,19 @@ export default function Search() {
                     ))}
                 </View>
 
+                
             </ScrollView>
+
+            <View>
+                <Overlay isVisible={dialogVisible} onBackdropPress={togleDialog}>
+                    <View style={styles.detail}>
+                        <Text>Erro ao listar a contagem solicitada</Text>
+                        <View style={styles.detail}>
+                            <Button title="Fechar" ></Button>
+                        </View>
+                    </View>
+                </Overlay>
+            </View>
         </Fragment>
     )
 

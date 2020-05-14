@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react';
-import {View, Image, Text, Button} from 'react-native';
+import {View, Text, Button, ToastAndroid} from 'react-native';
 import { Header} from 'react-native-elements';
-
 import {useNavigation} from '@react-navigation/native';
-import logoImg from '../../assets/logo.png';
 
 import styles from './styles';
 
@@ -31,6 +29,7 @@ export default function Index() {
                 <Text style={styles.title}>Bem-vindo</Text>
                 <Button title="Search" onPress={navigateToDetail} />            
             </View>
+
         </Fragment>
     )
 

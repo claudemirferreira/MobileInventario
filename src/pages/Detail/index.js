@@ -14,7 +14,6 @@ export default function Detail() {
 
     const route = useRoute();
     const navigation = useNavigation();
-
     const item = route.params.item;
 
     function togleOverlay() {
@@ -52,7 +51,6 @@ export default function Detail() {
             setShowLoading(false);
             //TODO needs notify error to client
         }
-        
     }
 
     return (
@@ -98,14 +96,12 @@ export default function Detail() {
                     disabled={quantityDisabled}
                     style={styles.detailsButton} 
                     title="Atualizar" 
-                    type="standard"
                     onPress={updateItem}
                     loading={showLoading}
                 />
             </View>
 
             <View>
-                {/* <Button title="Open Overlay" onPress={togleOverlay}></Button> */}
                 <Overlay isVisible={overlayVisible} onBackdropPress={togleOverlay}>
                     <View style={styles.detail}>
                         <Text>Contagem atualizada com sucesso</Text>

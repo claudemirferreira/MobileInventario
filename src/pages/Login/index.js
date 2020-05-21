@@ -1,29 +1,67 @@
-import React, { Component, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
   ImageBackground,
   KeyboardAvoidingView,
 } from 'react-native';
+import { onSigIn } from '../../services/auth'
+import api from '../../services/api';
 
 import { Input, Button, Icon } from 'react-native-elements';
 import styles from './styles';
 const BG_IMAGE = require('../../assets/bg_login.png');
 
+
 export default function Login() {
 
+  const navigation = useNavigation()
+
   const [isLoading, setIsLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function doLogin() {
-    console.log('do login');
-    setPassword("")
+  async function doLogin() {
+    setIsLoading(true)
+    try {
+      const result = await api.post('user/authentication', {
+        username: username,
+        password: password
+      });
+      onSigIn(result.data);
+      setPassword("")
+      setIsLoading(false)
+      setDisableButton(true)
+      navigation.navigate('Index');
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      canDisableButton();
+    }
   }
-  
+
+  function handleUsername(text) {
+    setUsername(text);
+    canDisableButton();
+  }
+
+  function handlePassword(text) {
+    setPassword(text);
+    canDisableButton();
+  }
+
+  function canDisableButton() {
+    if (username.length > 3 && password.length > 3) {
+      setDisableButton(false);
+    } else {
+      setDisableButton(true);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
@@ -52,13 +90,12 @@ export default function Login() {
                     style={{ backgroundColor: 'transparent' }}
                   />
                 }
-                value={username}
                 autoCapitalize="none"
                 autoCorrect={false}
                 returnKeyType="next"
                 inputStyle={{ marginLeft: 10 }}
                 placeholder={'Username'}
-                onChangeText={username => setUsername({ username })}
+                onChangeText={handleUsername}
                 errorMessage={
                   isEmailValid ? null : 'Please enter a valid email address'
                 }
@@ -74,7 +111,6 @@ export default function Login() {
                     style={{ backgroundColor: 'transparent' }}
                   />
                 }
-                value={password}
                 keyboardAppearance="light"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -86,14 +122,15 @@ export default function Login() {
                 }}
                 inputStyle={{ marginLeft: 10 }}
                 placeholder={'Password'}
-                onChangeText={password => setPassword({ password })}
+                value={password}
+                onChangeText={handlePassword}
                 errorMessage={
                   isPasswordValid
                     ? null
                     : 'Please enter at least 8 characters'
                 }
               />
-              
+
               <Button
                 buttonStyle={styles.loginButton}
                 containerStyle={{ marginTop: 32, flex: 0 }}
@@ -102,7 +139,7 @@ export default function Login() {
                 onPress={doLogin}
                 titleStyle={styles.loginTextButton}
                 loading={isLoading}
-                disabled={isLoading}
+                disabled={disableButton}
               />
 
             </View>

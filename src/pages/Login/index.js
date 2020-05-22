@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
   View,
@@ -6,7 +6,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
 } from 'react-native';
-import { onSigIn } from '../../services/auth'
+import { onSigIn, isAssignedIn } from '../../services/auth'
 import api from '../../services/api';
 
 import { Input, Button, Icon } from 'react-native-elements';
@@ -24,6 +24,14 @@ export default function Login() {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    isAssignedIn().then(result => {
+      if(result) {
+        navigation.navigate('Index');
+      }
+    });
+  });
 
   async function doLogin() {
     setIsLoading(true)
@@ -148,6 +156,7 @@ export default function Login() {
         </View>
       </ImageBackground>
     </View>
+   
   )
-
+            
 }

@@ -3,7 +3,6 @@ import {AsyncStorage} from 'react-native';
 export const USER_KEY = "ïnventario@user";
 export const TOKEN_KEY = "ïnventario@token";
 
-
 export const onSigIn = (user) => {
     AsyncStorage.setItem(TOKEN_KEY, user.token)
     AsyncStorage.setItem(USER_KEY, JSON.stringify(user))

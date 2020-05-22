@@ -2,12 +2,14 @@ import React, { useState, Fragment, useEffect } from 'react';
 import { View, ScrollView, ToastAndroid, BackHandler } from 'react-native';
 import { Header, Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 import styles from './styles';
 
 export default function Search() {
-    const navigation = useNavigation()
+    const navigation = useNavigation();    
+    const route = useRoute();
+
     const [search, setSearch] = useState("");
     const [itensFiltered, setItensFiltered] = useState([]);
     const [showLoading, setShowLoading] = useState(false);
@@ -72,6 +74,20 @@ export default function Search() {
 
         }
     }
+
+    const backAction = () => {
+        if (route.name === 'Search') {
+            navigation.navigate('Index');
+        }
+        return true;
+    };
+
+    useEffect(() => {
+        console.log("Navigation name: " + route.name);
+        if(route.name === 'Search') {
+            BackHandler.addEventListener('hardwareBackPress', backAction);
+        } 
+    })
 
     return (
         <Fragment>

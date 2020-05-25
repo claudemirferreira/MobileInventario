@@ -58,6 +58,7 @@ export default function Detail() {
 
             <Header
                 placement="left"
+                leftComponent={{ icon: 'menu', color: '#fff' }}
                 centerComponent={{ text: 'Detail', style: { color: '#fff' } }}
                 rightComponent={{ icon: 'home', color: '#fff', onPress: goHome}}
             >

@@ -12,10 +12,8 @@ export default function Index() {
     const route = useRoute();
 
     useEffect(() => {
-        console.log("Navigation name: " + route.name);
         BackHandler.addEventListener('hardwareBackPress', function () {
             if (route.name == 'Index') {
-                // BackHandler.exitApp()
 
                 Alert.alert("Alerta!", "Tem certeza que deseja sair da aplicação ?", [
                     {
@@ -53,7 +51,7 @@ export default function Index() {
         <Fragment>
             <Header
                 placement="left"
-                leftComponent={{ icon: '', color: '#fff' }}
+                leftComponent={{ icon: 'menu', color: '#fff' }}
                 centerComponent={{ text: 'Inventário', style: { color: '#fff' } }}
                 rightComponent={{ icon: '', color: '#fff' }}>
             </Header>

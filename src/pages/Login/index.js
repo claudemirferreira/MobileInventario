@@ -5,6 +5,7 @@ import {
   Text,
   ImageBackground,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 import { onSigIn } from '../../services/auth'
 import api from '../../services/api';
@@ -20,10 +21,9 @@ export default function Login() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorLogin, setErrorLogin] = useState(false)
 
   async function doLogin() {
     setIsLoading(true)
@@ -41,6 +41,7 @@ export default function Login() {
       console.log(error)
       setIsLoading(false)
       canDisableButton();
+      setErrorLogin(true);
     }
   }
 
@@ -55,6 +56,7 @@ export default function Login() {
   }
 
   function canDisableButton() {
+    setErrorLogin(false);
     if (username.length > 3 && password.length > 3) {
       setDisableButton(false);
     } else {
@@ -96,9 +98,6 @@ export default function Login() {
                 inputStyle={{ marginLeft: 10 }}
                 placeholder={'Username'}
                 onChangeText={handleUsername}
-                errorMessage={
-                  isEmailValid ? null : 'Please enter a valid email address'
-                }
               />
 
               <Input
@@ -124,12 +123,13 @@ export default function Login() {
                 placeholder={'Password'}
                 value={password}
                 onChangeText={handlePassword}
-                errorMessage={
-                  isPasswordValid
-                    ? null
-                    : 'Please enter at least 8 characters'
-                }
               />
+
+              {errorLogin &&
+                <View>
+                  <Text style={styles.loginTextError}>Login ou senha inválidos</Text>
+                </View>
+              }
 
               <Button
                 buttonStyle={styles.loginButton}

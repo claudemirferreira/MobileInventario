@@ -83,7 +83,6 @@ export default function Search() {
     };
 
     useEffect(() => {
-        console.log("Navigation name: " + route.name);
         if(route.name === 'Search') {
             BackHandler.addEventListener('hardwareBackPress', backAction);
         } 

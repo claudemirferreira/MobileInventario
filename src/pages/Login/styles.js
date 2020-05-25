@@ -65,6 +65,11 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     },
+    loginTextError: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'red',
+    },
     bgImage: {
         flex: 1,
         top: 0,

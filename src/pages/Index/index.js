@@ -42,9 +42,24 @@ export default function Index() {
         navigation.navigate('Search');
     }
 
+    function showLogoutConfirmation() {
+        Alert.alert("Alerta!", "Tem certeza que deseja fazer o logout ?", [
+            {
+                text: "Não",
+                onPress: () => null,
+                style: "cancel"
+            },
+            {
+                text: "Sim", onPress: () => {
+                    onSigOut();
+                    navigation.navigate('Login');
+                }
+            }
+        ]);
+    }
+
     function logout() {
-        onSigOut();
-        navigation.navigate('Login');
+        showLogoutConfirmation();
     }
 
     return (

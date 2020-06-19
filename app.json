@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#4e2a90"
+      "backgroundColor": "#524f56"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -25,7 +25,11 @@
     ],
     "android": {
       "package": "br.com.company.inventario",
-      "versionCode": 1
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#4e2a90",
+        "foregroundImage": "./assets/icon.png"
+      }
     }
   }
 }

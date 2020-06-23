@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken, isAssignedIn } from './auth'
+import { getToken } from './storage-utils'
 
 const api = axios.create({
     baseURL: 'http://10.0.1.30:3000/'

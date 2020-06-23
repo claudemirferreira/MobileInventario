@@ -1,7 +1,7 @@
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './src/components/contexts/auth';

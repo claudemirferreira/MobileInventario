@@ -10,8 +10,8 @@ const AppStack = createStackNavigator();
 export default function AppRoutes() {
 
     return (
-        <AppStack.Navigator screenOptions={{headerShown: false}}>
-            <AppStack.Screen name="Index" component={Index} ></AppStack.Screen>
+        <AppStack.Navigator initialRouteName='Menu' screenOptions={{headerShown: true}}>
+            <AppStack.Screen name="Menu" component={Index} ></AppStack.Screen>
             <AppStack.Screen name="Search" component={Search} ></AppStack.Screen>
             <AppStack.Screen name="Detail" component={Detail} ></AppStack.Screen>
         </AppStack.Navigator>

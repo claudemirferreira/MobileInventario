@@ -1,0 +1,403 @@
+commit 66d02606f042bfa9734ab74cc13756efa3b81a59
+Author: nelnsonsozinho <nelsonsozinho@gmail.com>
+Date:   Tue Jun 23 15:03:13 2020 -0400
+
+    style button changed
+
+diff --git a/App.js b/App.js
+index 4407e22..228a49c 100644
+--- a/App.js
++++ b/App.js
+@@ -1,7 +1,7 @@
+ import 'intl';
+ import 'intl/locale-data/jsonp/pt-BR';
+ 
+-import React, { useState } from 'react';
++import React from 'react';
+ 
+ import { NavigationContainer } from '@react-navigation/native';
+ import { AuthProvider } from './src/components/contexts/auth';
+diff --git a/src/components/contexts/auth.js b/src/components/contexts/auth.js
+index 18879b6..96d9b6d 100644
+--- a/src/components/contexts/auth.js
++++ b/src/components/contexts/auth.js
+@@ -1,5 +1,6 @@
+ import React, { useState } from 'react'
+ import { createContext } from 'react';
++import {afterSigIn, afterSigOut} from '../../services/storage-utils'
+ 
+ export const AuthContextData = {
+     loading: false,
+@@ -17,13 +18,14 @@ export function AuthProvider({ children }) {
+     const [user, setUser] = useState(null)
+     const [loading, setLoading] = useState(false);
+ 
+-
+     function onSignIn(user) {
+         setUser(user);
++        afterSigIn(user);
+     }
+ 
+     function signOut() {
+         setUser(null);
++        afterSigOut();
+     }
+ 
+     return (
+diff --git a/src/components/routes/app.routes.js b/src/components/routes/app.routes.js
+index 5d17ebb..48d9ba9 100644
+--- a/src/components/routes/app.routes.js
++++ b/src/components/routes/app.routes.js
+@@ -10,8 +10,8 @@ const AppStack = createStackNavigator();
+ export default function AppRoutes() {
+ 
+     return (
+-        <AppStack.Navigator screenOptions={{headerShown: false}}>
+-            <AppStack.Screen name="Index" component={Index} ></AppStack.Screen>
++        <AppStack.Navigator initialRouteName='Menu' screenOptions={{headerShown: true}}>
++            <AppStack.Screen name="Menu" component={Index} ></AppStack.Screen>
+             <AppStack.Screen name="Search" component={Search} ></AppStack.Screen>
+             <AppStack.Screen name="Detail" component={Detail} ></AppStack.Screen>
+         </AppStack.Navigator>
+diff --git a/src/pages/Detail/index.js b/src/pages/Detail/index.js
+index 066efe2..2d33ab4 100644
+--- a/src/pages/Detail/index.js
++++ b/src/pages/Detail/index.js
+@@ -1,5 +1,6 @@
+ import React, {useState, Fragment } from 'react';
+-import { Header, Button, Overlay, Text, Input } from 'react-native-elements';
++import { Overlay, Text, Input } from 'react-native-elements';
++import { Button } from 'react-native-elements';
+ import { View } from 'react-native';
+ import {useRoute, useNavigation} from '@react-navigation/native';
+ 
+@@ -56,14 +57,6 @@ export default function Detail() {
+     return (
+         <Fragment>
+ 
+-            <Header
+-                placement="left"
+-                leftComponent={{ icon: 'menu', color: '#fff' }}
+-                centerComponent={{ text: 'Detail', style: { color: '#fff' } }}
+-                rightComponent={{ icon: 'home', color: '#fff', onPress: goHome}}
+-            >
+-            </Header>
+-
+             <View style={styles.detail}>
+                 <Text 
+                     style={styles.incidentProperty}>
+@@ -95,7 +88,7 @@ export default function Detail() {
+                 
+                 <Button 
+                     disabled={quantityDisabled}
+-                    style={styles.detailsButton} 
++                    buttonStyle={styles.updateButton} 
+                     title="Atualizar" 
+                     onPress={updateItem}
+                     loading={showLoading}
+@@ -104,10 +97,10 @@ export default function Detail() {
+ 
+             <View>
+                 <Overlay isVisible={overlayVisible} onBackdropPress={togleOverlay}>
+-                    <View style={styles.detail}>
+-                        <Text>Contagem atualizada com sucesso</Text>
++                    <View style={styles.popup}>
++                        <Text style={styles.popupText}>Contagem atualizada com sucesso</Text>
+                         <View style={styles.detail}>
+-                            <Button title="Fechar" onPress={backToSearch}></Button>
++                            <Button title="Fechar" buttonStyle={styles.popupButton}  onPress={backToSearch}></Button>
+                         </View>
+                     </View>
+                 </Overlay>
+diff --git a/src/pages/Detail/styles.js b/src/pages/Detail/styles.js
+index d6223e7..06afe08 100644
+--- a/src/pages/Detail/styles.js
++++ b/src/pages/Detail/styles.js
+@@ -18,11 +18,33 @@ export default StyleSheet.create({
+     borderRadius: 8,
+   },
+ 
+-  detailsButton: {
+-    flexDirection: 'row',
+-    justifyContent: "space-between",
++  updateButton: {
++    backgroundColor: '#524f56',
++    borderRadius: 10,
++    alignItems: "center",
++    height: 60,
++    width: 300,
++  },
++
++  popup: {
++    padding: 25,
+     alignItems: 'center',
+-  }
++    marginHorizontal: 15,
++    marginVertical: 8
++  },
++
++  popupText: {
++    fontSize: 17,
++    fontWeight: 'bold'
++  },
++
++  popupButton: {
++    backgroundColor: '#524f56',
++    borderRadius: 10,
++    alignItems: "center",
++    height: 60,
++    width: 150,
++  },
+ 
+ });
+ 
+diff --git a/src/pages/Index/index.js b/src/pages/Index/index.js
+index aedc508..62e99b2 100644
+--- a/src/pages/Index/index.js
++++ b/src/pages/Index/index.js
+@@ -1,7 +1,7 @@
+ import React, { Fragment, useContext } from 'react';
+ 
+-import { View, Text, Button, Alert } from 'react-native';
+-import { Header } from 'react-native-elements';
++import { View, Text, Alert } from 'react-native';
++import { Button } from 'react-native-elements';
+ import { useNavigation } from '@react-navigation/native';
+ 
+ import styles from './styles';
+@@ -28,7 +28,6 @@ export default function Index() {
+             },
+             {
+                 text: "Sim", onPress: () => {
+-                    // onSigOut();
+                     signOut();
+                 }
+             }
+@@ -41,18 +40,20 @@ export default function Index() {
+ 
+     return (
+         <Fragment>
+-            <Header
+-                placement="left"
+-                leftComponent={{ icon: 'menu', color: '#fff' }}
+-                centerComponent={{ text: 'Inventário', style: { color: '#fff' } }}
+-                rightComponent={{ icon: '', color: '#fff' }}>
+-            </Header>
+ 
+             <View style={styles.container}>
+                 <Text style={styles.title}>Bem-vindo</Text>
+-                <Button title="Pesquisar Contagem" onPress={navigateToDetail} />
++                
++                <Button 
++                    buttonStyle={styles.detailsButton}
++                    containerStyle={{ marginTop: 32, flex: 0 }}
++                    title="Pesquisar Contagem"  
++                    onPress={navigateToDetail} 
++                />
++                
+                 <Separator />
+-                <Button title="Sair" onPress={logout} />
++                
++                <Button title="Sair" buttonStyle={styles.detailsButton} onPress={logout} />
+             </View>
+ 
+         </Fragment>
+diff --git a/src/pages/Index/styles.js b/src/pages/Index/styles.js
+index 2c5ec7a..2c0a487 100644
+--- a/src/pages/Index/styles.js
++++ b/src/pages/Index/styles.js
+@@ -1,5 +1,6 @@
+ import {StyleSheet} from 'react-native';
+ import Constants from 'expo-constants';
++import { color } from 'react-native-reanimated';
+ 
+ export default StyleSheet.create({
+ 
+@@ -7,23 +8,9 @@ export default StyleSheet.create({
+         flex: 1, 
+         paddingHorizontal: 24,
+         paddingTop: Constants.statusBarHeight + 20,
++        alignItems: 'center',
+     },
+     
+-    header: {
+-        flexDirection: 'row', 
+-        justifyContent: 'space-between',
+-        alignItems: 'center'
+-    },
+-
+-    headerText: {
+-      fontSize: 15,
+-      color: '#737380'  
+-    },
+-
+-    headerTextBold: {
+-        fontWeight: 'bold'
+-    }, 
+-
+     title: {
+         fontSize: 30, 
+         marginBottom: 16, 
+@@ -32,51 +19,17 @@ export default StyleSheet.create({
+         fontWeight: 'bold'    
+     },
+ 
+-    description: {
+-        fontSize: 16, 
+-        lineHeight: 24, 
+-        color: '#737380'
+-    },
+-
+-    incidentList: {
+-        marginTop: 32
+-    },
+-
+-    incident: {
+-        padding: 24, 
+-        borderRadius: 8,
+-        backgroundColor: '#eff',
+-        marginBottom: 16
+-    }, 
+-
+-    incidentProperty: {
+-        fontSize: 14, 
+-        color: '#41414d', 
+-        fontWeight: 'bold'
+-    }, 
+-
+-    incidentValue: {
+-        marginTop: 8, 
+-        fontSize: 15, 
+-        marginBottom: 24, 
+-        color: '#737380'
+-    }, 
+-
+     detailsButton: {
+-        flexDirection: 'row', 
+-        justifyContent: "space-between", 
+-        alignItems: 'center'
+-    },
+-
+-    detailsButtonText: {
+-        color: '#e22041', 
+-        fontSize: 15, 
+-        fontWeight: 'bold'
++        backgroundColor: '#524f56',
++        borderRadius: 10,
++        alignItems: "center",
++        height: 60,
++        width: 300,
+     },
+ 
+     separator: {
+-        marginVertical: 8,
+-        borderBottomColor: '#737373',
++        marginVertical: 10,
++        borderBottomColor: '#524f56',
+         borderBottomWidth: StyleSheet.hairlineWidth,
+       },
+ 
+diff --git a/src/pages/Search/index.js b/src/pages/Search/index.js
+index f183eb1..cd3945a 100644
+--- a/src/pages/Search/index.js
++++ b/src/pages/Search/index.js
+@@ -1,6 +1,6 @@
+-import React, { useState, Fragment, useEffect } from 'react';
+-import { View, ScrollView, ToastAndroid, BackHandler } from 'react-native';
+-import { Header, Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
++import React, { useState, Fragment } from 'react';
++import { View, ScrollView, ToastAndroid } from 'react-native';
++import { Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
+ 
+ import { useNavigation, useRoute } from '@react-navigation/native';
+ import api from '../../services/api';
+@@ -45,7 +45,7 @@ export default function Search() {
+     }
+ 
+     function goHome() {
+-        navigation.navigate('Index');
++        navigation.goBack();
+     }
+ 
+     function clearItens() {
+@@ -75,28 +75,8 @@ export default function Search() {
+         }
+     }
+ 
+-    const backAction = () => {
+-        if (route.name === 'Search') {
+-            navigation.navigate('Index');
+-        }
+-        return true;
+-    };
+-
+-    useEffect(() => {
+-        if(route.name === 'Search') {
+-            BackHandler.addEventListener('hardwareBackPress', backAction);
+-        } 
+-    })
+-
+     return (
+         <Fragment>
+-            <Header
+-                placement="left"
+-                leftComponent={{ icon: 'menu', color: '#fff' }}
+-                centerComponent={{ text: 'Search', style: { fontWeight: 'bold', color: '#fff' } }}
+-                rightComponent={{ icon: 'home', color: '#fff', onPress: goHome }}
+-            >
+-            </Header>
+ 
+             <ScrollView>
+ 
+@@ -114,7 +94,7 @@ export default function Search() {
+                     {itensFiltered.map(item => (
+                         <ListItem
+                             key={item.id}
+-                            title={item.endereco.item.nome}
++                            title={item.id +":"+ item.endereco.item.nome}
+                             subtitle={item.endereco.descricao}
+                             chevronColor="white"
+                             chevron
+diff --git a/src/services/api.js b/src/services/api.js
+index 6a9b5a9..83a5b6d 100644
+--- a/src/services/api.js
++++ b/src/services/api.js
+@@ -1,5 +1,5 @@
+ import axios from 'axios';
+-import { getToken, isAssignedIn } from './auth'
++import { getToken } from './storage-utils'
+ 
+ const api = axios.create({
+     baseURL: 'http://10.0.1.30:3000/'
+diff --git a/src/services/auth.js b/src/services/storage-utils.js
+similarity index 69%
+rename from src/services/auth.js
+rename to src/services/storage-utils.js
+index 8352c04..1b5f0f8 100644
+--- a/src/services/auth.js
++++ b/src/services/storage-utils.js
+@@ -3,22 +3,17 @@ import {AsyncStorage} from 'react-native';
+ export const USER_KEY = "inventario@user";
+ export const TOKEN_KEY = "inventario@token";
+ 
+-export const onSigIn = (user) => {
++export const afterSigIn = (user) => {
+     AsyncStorage.setItem(TOKEN_KEY, user.token)
+     AsyncStorage.setItem(USER_KEY, JSON.stringify(user))
+     console.log("Token updated: " + getToken())
+ };
+ 
+-export const onSigOut = () => {
++export const afterSigOut = () => {
+     AsyncStorage.removeItem(TOKEN_KEY)
+     AsyncStorage.removeItem(USER_KEY)
+ };
+ 
+-export const isAuthenticated = async () => {
+-    const token = await AsyncStorage.getItem(USER_KEY);
+-    return token != null ? true : false;  
+-};
+-
+ export const getToken = async () => {
+     const token = await AsyncStorage.getItem(TOKEN_KEY);
+     return token;

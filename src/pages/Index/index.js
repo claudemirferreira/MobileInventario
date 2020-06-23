@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 
-import { View, Text, Button, Alert } from 'react-native';
-import { Header } from 'react-native-elements';
+import { View, Text, Alert } from 'react-native';
+import { Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
 import styles from './styles';
@@ -28,7 +28,6 @@ export default function Index() {
             },
             {
                 text: "Sim", onPress: () => {
-                    // onSigOut();
                     signOut();
                 }
             }
@@ -41,18 +40,20 @@ export default function Index() {
 
     return (
         <Fragment>
-            <Header
-                placement="left"
-                leftComponent={{ icon: 'menu', color: '#fff' }}
-                centerComponent={{ text: 'Inventário', style: { color: '#fff' } }}
-                rightComponent={{ icon: '', color: '#fff' }}>
-            </Header>
 
             <View style={styles.container}>
                 <Text style={styles.title}>Bem-vindo</Text>
-                <Button title="Pesquisar Contagem" onPress={navigateToDetail} />
+                
+                <Button 
+                    buttonStyle={styles.detailsButton}
+                    containerStyle={{ marginTop: 32, flex: 0 }}
+                    title="Pesquisar Contagem"  
+                    onPress={navigateToDetail} 
+                />
+                
                 <Separator />
-                <Button title="Sair" onPress={logout} />
+                
+                <Button title="Sair" buttonStyle={styles.detailsButton} onPress={logout} />
             </View>
 
         </Fragment>

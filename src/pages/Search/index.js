@@ -1,6 +1,6 @@
-import React, { useState, Fragment, useEffect } from 'react';
-import { View, ScrollView, ToastAndroid, BackHandler } from 'react-native';
-import { Header, Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
+import React, { useState, Fragment } from 'react';
+import { View, ScrollView, ToastAndroid } from 'react-native';
+import { Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
@@ -45,7 +45,7 @@ export default function Search() {
     }
 
     function goHome() {
-        navigation.navigate('Index');
+        navigation.goBack();
     }
 
     function clearItens() {
@@ -75,28 +75,8 @@ export default function Search() {
         }
     }
 
-    const backAction = () => {
-        if (route.name === 'Search') {
-            navigation.navigate('Index');
-        }
-        return true;
-    };
-
-    useEffect(() => {
-        if(route.name === 'Search') {
-            BackHandler.addEventListener('hardwareBackPress', backAction);
-        } 
-    })
-
     return (
         <Fragment>
-            <Header
-                placement="left"
-                leftComponent={{ icon: 'menu', color: '#fff' }}
-                centerComponent={{ text: 'Search', style: { fontWeight: 'bold', color: '#fff' } }}
-                rightComponent={{ icon: 'home', color: '#fff', onPress: goHome }}
-            >
-            </Header>
 
             <ScrollView>
 
@@ -114,7 +94,7 @@ export default function Search() {
                     {itensFiltered.map(item => (
                         <ListItem
                             key={item.id}
-                            title={item.endereco.item.nome}
+                            title={item.id +":"+ item.endereco.item.nome}
                             subtitle={item.endereco.descricao}
                             chevronColor="white"
                             chevron

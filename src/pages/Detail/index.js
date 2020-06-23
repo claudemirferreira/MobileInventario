@@ -1,5 +1,6 @@
 import React, {useState, Fragment } from 'react';
-import { Header, Button, Overlay, Text, Input } from 'react-native-elements';
+import { Overlay, Text, Input } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { View } from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 
@@ -56,14 +57,6 @@ export default function Detail() {
     return (
         <Fragment>
 
-            <Header
-                placement="left"
-                leftComponent={{ icon: 'menu', color: '#fff' }}
-                centerComponent={{ text: 'Detail', style: { color: '#fff' } }}
-                rightComponent={{ icon: 'home', color: '#fff', onPress: goHome}}
-            >
-            </Header>
-
             <View style={styles.detail}>
                 <Text 
                     style={styles.incidentProperty}>
@@ -95,7 +88,7 @@ export default function Detail() {
                 
                 <Button 
                     disabled={quantityDisabled}
-                    style={styles.detailsButton} 
+                    buttonStyle={styles.updateButton} 
                     title="Atualizar" 
                     onPress={updateItem}
                     loading={showLoading}
@@ -104,10 +97,10 @@ export default function Detail() {
 
             <View>
                 <Overlay isVisible={overlayVisible} onBackdropPress={togleOverlay}>
-                    <View style={styles.detail}>
-                        <Text>Contagem atualizada com sucesso</Text>
+                    <View style={styles.popup}>
+                        <Text style={styles.popupText}>Contagem atualizada com sucesso</Text>
                         <View style={styles.detail}>
-                            <Button title="Fechar" onPress={backToSearch}></Button>
+                            <Button title="Fechar" buttonStyle={styles.popupButton}  onPress={backToSearch}></Button>
                         </View>
                     </View>
                 </Overlay>

@@ -18,11 +18,33 @@ export default StyleSheet.create({
     borderRadius: 8,
   },
 
-  detailsButton: {
-    flexDirection: 'row',
-    justifyContent: "space-between",
+  updateButton: {
+    backgroundColor: '#524f56',
+    borderRadius: 10,
+    alignItems: "center",
+    height: 60,
+    width: 300,
+  },
+
+  popup: {
+    padding: 25,
     alignItems: 'center',
-  }
+    marginHorizontal: 15,
+    marginVertical: 8
+  },
+
+  popupText: {
+    fontSize: 17,
+    fontWeight: 'bold'
+  },
+
+  popupButton: {
+    backgroundColor: '#524f56',
+    borderRadius: 10,
+    alignItems: "center",
+    height: 60,
+    width: 150,
+  },
 
 });
 

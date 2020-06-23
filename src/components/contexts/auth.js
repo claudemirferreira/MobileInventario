@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { createContext } from 'react';
+import {afterSigIn, afterSigOut} from '../../services/storage-utils'
 
 export const AuthContextData = {
     loading: false,
@@ -17,13 +18,14 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(false);
 
-
     function onSignIn(user) {
         setUser(user);
+        afterSigIn(user);
     }
 
     function signOut() {
         setUser(null);
+        afterSigOut();
     }
 
     return (

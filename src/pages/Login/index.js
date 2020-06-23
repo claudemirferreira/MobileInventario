@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 import AuthContext from '../../components/contexts/auth'
-
+import api from '../../services/api'
 import { Input, Button, Icon } from 'react-native-elements';
 import styles from './styles';
 
@@ -15,16 +15,31 @@ const BG_IMAGE = require('../../assets/bg_login.png');
 
 export default function Login() {
 
+  const [isLoading, setIsLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorLogin, setErrorLogin] = useState(false)
 
-  const {loading, signed, signIn, loginFailed, errorMessage} = useContext(AuthContext);
+  const { onSignIn } = useContext(AuthContext);
 
-  function doLogin() {
-    signIn(username, password);
-    setDisableButton(false);
-  } 
+  async function doLogin() {
+    setIsLoading(true)
+    try {
+      const response = await api.post('user/authentication', {
+        username: username,
+        password: password
+      });
+      onSignIn(response.data);
+      setIsLoading(false)
+      setDisableButton(true)
+    } catch (error) {
+      console.log('Error: ' + error)
+      setIsLoading(false)
+      canDisableButton();
+      setErrorLogin(true);
+    }
+  }
 
   function handleUsername(text) {
     setUsername(text);
@@ -65,7 +80,7 @@ export default function Login() {
               <Input
                 leftIcon={
                   <Icon
-                    name="envelope-o"
+                    name="user-o"
                     type="font-awesome"
                     color="rgba(0, 0, 0, 0.38)"
                     size={25}
@@ -105,7 +120,7 @@ export default function Login() {
                 onChangeText={handlePassword}
               />
 
-              {loginFailed &&
+              {errorLogin &&
                 <View>
                   <Text style={styles.loginTextError}>Login ou senha inválidos</Text>
                 </View>
@@ -118,7 +133,7 @@ export default function Login() {
                 title='LOGIN'
                 onPress={doLogin}
                 titleStyle={styles.loginTextButton}
-                loading={loading}
+                loading={isLoading}
                 disabled={disableButton}
               />
 

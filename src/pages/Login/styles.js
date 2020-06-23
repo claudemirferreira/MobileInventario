@@ -30,7 +30,7 @@ export default StyleSheet.create({
         borderRightWidth: 70,
         borderBottomWidth: 70,
         borderColor: 'white',
-        backgroundColor: '#4e2a90',
+        backgroundColor: '#524f56',
     },
     loginContainer: {
         alignItems: 'center',
@@ -42,7 +42,7 @@ export default StyleSheet.create({
         fontWeight: 'bold',
     },
     loginButton: {
-        backgroundColor: '#4e2a90',
+        backgroundColor: '#524f56',
         borderRadius: 10,
         height: 50,
         width: 200,

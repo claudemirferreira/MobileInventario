@@ -1,49 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
   ImageBackground,
-  KeyboardAvoidingView,
-  ToastAndroid,
+  KeyboardAvoidingView
 } from 'react-native';
-import { onSigIn } from '../../services/auth'
-import api from '../../services/api';
+import AuthContext from '../../components/contexts/auth'
 
 import { Input, Button, Icon } from 'react-native-elements';
 import styles from './styles';
+
 const BG_IMAGE = require('../../assets/bg_login.png');
 
 
 export default function Login() {
 
-  const navigation = useNavigation()
-
-  const [isLoading, setIsLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorLogin, setErrorLogin] = useState(false)
 
-  async function doLogin() {
-    setIsLoading(true)
-    try {
-      const result = await api.post('user/authentication', {
-        username: username,
-        password: password
-      });
-      onSigIn(result.data);
-      setPassword("")
-      setIsLoading(false)
-      setDisableButton(true)
-      navigation.navigate('Index');
-    } catch (error) {
-      console.log(error)
-      setIsLoading(false)
-      canDisableButton();
-      setErrorLogin(true);
-    }
-  }
+  const {loading, signed, signIn, loginFailed, errorMessage} = useContext(AuthContext);
+
+  function doLogin() {
+    signIn(username, password);
+    setDisableButton(false);
+  } 
 
   function handleUsername(text) {
     setUsername(text);
@@ -56,7 +37,6 @@ export default function Login() {
   }
 
   function canDisableButton() {
-    setErrorLogin(false);
     if (username.length > 3 && password.length > 3) {
       setDisableButton(false);
     } else {
@@ -125,7 +105,7 @@ export default function Login() {
                 onChangeText={handlePassword}
               />
 
-              {errorLogin &&
+              {loginFailed &&
                 <View>
                   <Text style={styles.loginTextError}>Login ou senha inválidos</Text>
                 </View>
@@ -138,7 +118,7 @@ export default function Login() {
                 title='LOGIN'
                 onPress={doLogin}
                 titleStyle={styles.loginTextButton}
-                loading={isLoading}
+                loading={loading}
                 disabled={disableButton}
               />
 

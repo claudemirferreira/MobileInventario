@@ -1,45 +1,22 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useContext } from 'react';
 
-import { View, Text, Button, BackHandler, Alert } from 'react-native';
+import { View, Text, Button, Alert } from 'react-native';
 import { Header } from 'react-native-elements';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from './styles';
-import { onSigOut } from '../../services/auth'
+import AuthContext from '../../components/contexts/auth';
 
 export default function Index() {
-    const navigation = useNavigation()
-    const route = useRoute();
-
-    useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', function () {
-            if (route.name == 'Index') {
-
-                Alert.alert("Alerta!", "Tem certeza que deseja sair da aplicação ?", [
-                    {
-                        text: "Não",
-                        onPress: () => null,
-                        style: "cancel"
-                    },
-                    {
-                        text: "Sim", onPress: () => {
-                            onSigOut();
-                            navigation.navigate('Login');
-                        }
-                    }
-                ]);
-
-                return true;
-            }
-        });
-    })
+    const {signOut} = useContext(AuthContext);
+    const navigation = useNavigation();
 
     function Separator() {
         return <View style={styles.separator} />;
     }
 
     function navigateToDetail() {
-        navigation.navigate('Search');
+        navigation.push('Search');
     }
 
     function showLogoutConfirmation() {
@@ -51,8 +28,8 @@ export default function Index() {
             },
             {
                 text: "Sim", onPress: () => {
-                    onSigOut();
-                    navigation.navigate('Login');
+                    // onSigOut();
+                    signOut();
                 }
             }
         ]);
@@ -73,9 +50,9 @@ export default function Index() {
 
             <View style={styles.container}>
                 <Text style={styles.title}>Bem-vindo</Text>
-                <Button title="Search" onPress={navigateToDetail} />
+                <Button title="Pesquisar Contagem" onPress={navigateToDetail} />
                 <Separator />
-                <Button title="Logout" onPress={logout} />
+                <Button title="Sair" onPress={logout} />
             </View>
 
         </Fragment>

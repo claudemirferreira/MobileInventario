@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
   ImageBackground,
-  KeyboardAvoidingView,
-  ToastAndroid,
+  KeyboardAvoidingView
 } from 'react-native';
-import { onSigIn } from '../../services/auth'
-import api from '../../services/api';
-
+import AuthContext from '../../components/contexts/auth'
+import api from '../../services/api'
 import { Input, Button, Icon } from 'react-native-elements';
 import styles from './styles';
+
 const BG_IMAGE = require('../../assets/bg_login.png');
 
 
 export default function Login() {
-
-  const navigation = useNavigation()
 
   const [isLoading, setIsLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
@@ -25,20 +21,20 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errorLogin, setErrorLogin] = useState(false)
 
+  const { onSignIn } = useContext(AuthContext);
+
   async function doLogin() {
     setIsLoading(true)
     try {
-      const result = await api.post('user/authentication', {
+      const response = await api.post('user/authentication', {
         username: username,
         password: password
       });
-      onSigIn(result.data);
-      setPassword("")
+      onSignIn(response.data);
       setIsLoading(false)
       setDisableButton(true)
-      navigation.navigate('Index');
     } catch (error) {
-      console.log(error)
+      console.log('Error: ' + error)
       setIsLoading(false)
       canDisableButton();
       setErrorLogin(true);
@@ -56,7 +52,6 @@ export default function Login() {
   }
 
   function canDisableButton() {
-    setErrorLogin(false);
     if (username.length > 3 && password.length > 3) {
       setDisableButton(false);
     } else {
@@ -85,7 +80,7 @@ export default function Login() {
               <Input
                 leftIcon={
                   <Icon
-                    name="envelope-o"
+                    name="user-o"
                     type="font-awesome"
                     color="rgba(0, 0, 0, 0.38)"
                     size={25}

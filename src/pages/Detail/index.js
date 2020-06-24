@@ -24,10 +24,6 @@ export default function Detail() {
     function backToSearch() {
         navigation.navigate('Search');
     }
-
-    function goHome() {
-        navigation.navigate('Index');
-    }
     
     function tryDisableButton(text) {
         if(text.length > 0) {
@@ -50,7 +46,6 @@ export default function Detail() {
             setOverlayVisible(true);
         } catch(error) {
             setShowLoading(false);
-            //TODO needs notify error to client
         }
     }
 

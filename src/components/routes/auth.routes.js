@@ -9,7 +9,7 @@ export default function AuthRoutes() {
 
     return(    
         <AuthStack.Navigator screenOptions={{headerShown: false}}>
-            <AuthStack.Screen  name="Authentication"   component={Login}></AuthStack.Screen>
+            <AuthStack.Screen  name="Authentication" component={Login}></AuthStack.Screen>
         </AuthStack.Navigator>
     )
 

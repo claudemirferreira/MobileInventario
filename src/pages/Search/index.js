@@ -2,13 +2,12 @@ import React, { useState, Fragment } from 'react';
 import { View, ScrollView, ToastAndroid } from 'react-native';
 import { Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import styles from './styles';
 
 export default function Search() {
     const navigation = useNavigation();    
-    const route = useRoute();
 
     const [search, setSearch] = useState("");
     const [itensFiltered, setItensFiltered] = useState([]);
@@ -44,10 +43,6 @@ export default function Search() {
         );
     }
 
-    function goHome() {
-        navigation.goBack();
-    }
-
     function clearItens() {
         setItensFiltered([]);
         setShowLoading(false)
@@ -75,6 +70,10 @@ export default function Search() {
         }
     }
 
+    function handleBarCode() {
+        console.log('Bar code');
+    }
+
     return (
         <Fragment>
 
@@ -88,6 +87,14 @@ export default function Search() {
                     showLoading={showLoading}
                     keyboardType='numeric'
                     {...searchBarProperties}
+                />
+
+                <Button 
+                    
+                    containerStyle={{ marginTop: 32, flex: 0 }}
+                    title="Barcode"  
+                    onPress={handleBarCode}
+                     
                 />
 
                 <View style={{ backgroundColor: '#ECEFF1', paddingVertical: 8 }}>

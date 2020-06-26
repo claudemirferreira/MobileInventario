@@ -1,21 +1,35 @@
-import React, { useState, Fragment } from 'react';
-import { View, ScrollView, ToastAndroid } from 'react-native';
+import React, { useState, useEffect, Fragment } from 'react';
+import { View, ScrollView, ToastAndroid, Vibration, StyleSheet } from 'react-native';
 import { Text, Button, ListItem, Overlay, SearchBar } from 'react-native-elements';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
-import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 import styles from './styles';
 
 export default function Search() {
-    const navigation = useNavigation();    
+    const navigation = useNavigation();
+    const route = useRoute();
 
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState();
     const [itensFiltered, setItensFiltered] = useState([]);
     const [showLoading, setShowLoading] = useState(false);
     const [dialogVisible, setDialogVisible] = useState(false);
 
+    const [hasPermission, setHasPermission] = useState(null);
+    const [scanned, setScanned] = useState(false);
+    const [openScan, setOpenScan] = useState(false);
+
+
+    useEffect(() => {
+        (async () => {
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
+    }), [];
+
     const searchBarProperties = {
-        platform: "android",
+        platform: "android"
     }
 
     function togleDialog() {
@@ -45,14 +59,16 @@ export default function Search() {
 
     function clearItens() {
         setItensFiltered([]);
-        setShowLoading(false)
+        setShowLoading(false);
+        setSearch('');
+        route.params = undefined;
     }
 
     async function loadItens(search) {
         setItensFiltered([]);
         setSearch(search);
 
-        if (search.length > 0) {
+        if (search.length > 4) {
             setShowLoading(true);
             try {
                 const response = await api.get(`contagem/lista/${search}`, {});
@@ -70,54 +86,87 @@ export default function Search() {
         }
     }
 
+    const handleBarCodeScanned = ({ type, data }) => {
+        const result = { type: type, data: data }
+        setScanned(false);
+        setOpenScan(false);
+        Vibration.vibrate();
+        loadItens(data);
+    };
+
     function handleBarCode() {
-        console.log('Bar code');
+        setOpenScan(true);
     }
 
     return (
+
+
+
+
         <Fragment>
 
-            <ScrollView>
 
-                <SearchBar
-                    placeholder="Código aqui..."
-                    onChangeText={loadItens}
-                    onClear={clearItens}
-                    value={search}
-                    showLoading={showLoading}
-                    keyboardType='numeric'
-                    {...searchBarProperties}
-                />
-
-                <Button 
-                    
-                    containerStyle={{ marginTop: 32, flex: 0 }}
-                    title="Barcode"  
-                    onPress={handleBarCode}
-                     
-                />
-
-                <View style={{ backgroundColor: '#ECEFF1', paddingVertical: 8 }}>
-                    {itensFiltered.map(item => (
-                        <ListItem
-                            key={item.id}
-                            title={item.id +":"+ item.endereco.item.nome}
-                            subtitle={item.endereco.descricao}
-                            chevronColor="white"
-                            chevron
-                            onPress={() => openDetail(item)}
-                            containerStyle={{
-                                marginHorizontal: 16,
-                                marginVertical: 8,
-                                borderRadius: 8,
-                            }}
-                        >
-                        </ListItem>
-                    ))}
+            {openScan &&
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end',
+                    }}>
+                    <BarCodeScanner
+                        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                        style={StyleSheet.absoluteFillObject}
+                    />
                 </View>
+            }
 
+            {!openScan &&
+                <ScrollView>
 
-            </ScrollView>
+                    <View style={styles.searchContainer}>
+                        <SearchBar
+                            inputStyle={{backgroundColor: 'white'}}
+                            containerStyle={{backgroundColor: 'white', borderWidth: 5, borderRadius: 10}}
+                            placeholderTextColor={'#g5g5g5'}
+                            
+                            placeholder="Código aqui..."
+                            onChangeText={loadItens}
+                            onClear={clearItens}
+                            value={text => (setSearch(text))}
+                            showLoading={showLoading}
+                            keyboardType='numeric'
+                            {...searchBarProperties}
+                        />
+
+                        <Button
+                            
+                            title="Barcode"
+                            onPress={handleBarCode}
+                            
+                            buttonStyle={styles.scannerButton}
+                        />
+                    </View>
+
+                    <View style={{ backgroundColor: '#ECEFF1', paddingVertical: 8 }}>
+                        {itensFiltered.map(item => (
+                            <ListItem
+                                key={item.id}
+                                title={item.id + ":" + item.endereco.item.nome}
+                                subtitle={item.endereco.descricao}
+                                chevronColor="white"
+                                chevron
+                                onPress={() => openDetail(item)}
+                                containerStyle={{
+                                    marginHorizontal: 16,
+                                    marginVertical: 8,
+                                    borderRadius: 8,
+                                }}
+                            >
+                            </ListItem>
+                        ))}
+                    </View>
+                </ScrollView>
+            }
 
             <View>
                 <Overlay isVisible={dialogVisible} onBackdropPress={togleDialog}>
@@ -129,7 +178,9 @@ export default function Search() {
                     </View>
                 </Overlay>
             </View>
+
         </Fragment>
+
     )
 
 

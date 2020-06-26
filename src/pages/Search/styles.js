@@ -1,6 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default StyleSheet.create({
+
 
   detail: {
     padding: 24,
@@ -12,4 +16,14 @@ export default StyleSheet.create({
     borderRadius: 8,
   },
 
+  scannerButton: {
+    backgroundColor: '#524f56',
+    borderRadius: 10,
+    height: 50,
+    width: SCREEN_WIDTH,
+  },
+
+  searchContainer: {
+    alignItems: 'center',
+  }
 });

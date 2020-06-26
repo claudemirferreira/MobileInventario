@@ -127,12 +127,11 @@ export default function Search() {
                         <SearchBar
                             inputStyle={{backgroundColor: 'white'}}
                             containerStyle={{backgroundColor: 'white', borderWidth: 5, borderRadius: 10}}
-                            placeholderTextColor={'#g5g5g5'}
                             
                             placeholder="Código aqui..."
-                            onChangeText={loadItens}
+                            onChangeText={text => (loadItens(text))}
                             onClear={clearItens}
-                            value={text => (setSearch(text))}
+                            value={search}
                             showLoading={showLoading}
                             keyboardType='numeric'
                             {...searchBarProperties}

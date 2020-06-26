@@ -30,12 +30,12 @@ export default function Login() {
         username: username,
         password: password
       });
-      onSignIn(response.data);
-      setIsLoading(false)
-      setDisableButton(true)
+      setIsLoading(false);
+      setDisableButton(true);
+      onSignIn(response.data);      
     } catch (error) {
       console.log('Error: ' + error)
-      setIsLoading(false)
+      setIsLoading(false);
       canDisableButton();
       setErrorLogin(true);
     }

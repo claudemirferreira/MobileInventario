@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken } from './storage-utils'
 
 const api = axios.create({
-    baseURL: 'http://54.145.87.8:3000/'
+    baseURL: 'http://typeorm-inventario.herokuapp.com/'
 });
 
 api.interceptors.request.use(async (config) => {
